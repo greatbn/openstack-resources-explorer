@@ -1,0 +1,17 @@
+# clouds.yaml.example
+# Place this file in your current directory, ~/.config/openstack/, or /etc/openstack/
+# Rename it to clouds.yaml and update the values.
+
+clouds:
+  mycloud:
+    auth:
+      auth_url: http://172.25.252.10:5000/v3
+      username: "admin"
+      password: "mypassword"
+      project_name: "admin"
+      project_domain_name: "Default"
+      user_domain_name: "Default"
+    region_name: "HaNoi"
+    interface: "public"
+    identity_api_version: 3
+

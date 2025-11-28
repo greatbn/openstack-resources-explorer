@@ -1,0 +1,208 @@
+{
+  "project_id": "demo-project-id",
+  "project_name": "demo",
+  "generated_at": "2023-10-27T10:00:00Z",
+  "nodes": [
+    {
+      "id": "server-1",
+      "type": "server",
+      "name": "web-01",
+      "meta": {
+        "availability_zone": "us-east-1a",
+        "status": "ACTIVE",
+        "flavor_name": "m1.small",
+        "image_name": "ubuntu-20.04",
+        "key_name": "my-key",
+        "created_at": "2023-10-27T10:00:00Z"
+      }
+    },
+    {
+      "id": "server-2",
+      "type": "server",
+      "name": "db-01",
+      "meta": {
+        "availability_zone": "us-east-1b",
+        "status": "ACTIVE",
+        "flavor_name": "m1.medium",
+        "image_name": "centos-8",
+        "key_name": "my-key",
+        "created_at": "2023-10-27T10:05:00Z"
+      }
+    },
+    {
+      "id": "vol-3321",
+      "type": "volume",
+      "name": "vol-3321",
+      "meta": {
+        "size": 20,
+        "volume_type": "ssd"
+      }
+    },
+    {
+      "id": "snap-1",
+      "type": "snapshot",
+      "name": "snap-daily",
+      "meta": {
+        "size": 20
+      }
+    },
+    {
+      "id": "vol-9982",
+      "type": "volume",
+      "name": "vol-9982",
+      "meta": {
+        "size": 100,
+        "volume_type": "hdd"
+      }
+    },
+    {
+      "id": "port-ab12",
+      "type": "port",
+      "name": "port-ab12",
+      "meta": {
+        "fixed_ips": [{"ip_address": "192.168.1.10"}],
+        "security_groups": ["sg-1"]
+      }
+    },
+    {
+      "id": "sg-1",
+      "type": "security_group",
+      "name": "web-sg",
+      "meta": {
+        "security_group_rules": [
+          {
+            "direction": "ingress",
+            "protocol": "tcp",
+            "port_range_min": 80,
+            "port_range_max": 80,
+            "remote_ip_prefix": "0.0.0.0/0"
+          },
+          {
+            "direction": "ingress",
+            "protocol": "tcp",
+            "port_range_min": 22,
+            "port_range_max": 22,
+            "remote_ip_prefix": "10.0.0.0/8"
+          }
+        ]
+      }
+    },
+    {
+      "id": "net-1",
+      "type": "network",
+      "name": "private-net",
+      "meta": {}
+    },
+    {
+      "id": "subnet-1",
+      "type": "subnet",
+      "name": "private-subnet",
+      "meta": {
+        "cidr": "192.168.1.0/24",
+        "gateway_ip": "192.168.1.1"
+      }
+    },
+    {
+      "id": "lb-1",
+      "type": "load_balancer",
+      "name": "lb-web",
+      "meta": {}
+    },
+    {
+      "id": "listener-1",
+      "type": "listener",
+      "name": "http-listener",
+      "meta": {
+        "protocol": "HTTP",
+        "protocol_port": 80
+      }
+    },
+    {
+      "id": "policy-1",
+      "type": "l7_policy",
+      "name": "redirect-policy",
+      "meta": {
+        "action": "REDIRECT_TO_POOL"
+      }
+    },
+    {
+      "id": "rule-1",
+      "type": "l7_rule",
+      "name": "path-rule",
+      "meta": {
+        "type": "PATH",
+        "compare_type": "STARTS_WITH",
+        "value": "/api"
+      }
+    },
+    {
+      "id": "pool-1",
+      "type": "pool",
+      "name": "web-pool",
+      "meta": {
+        "protocol": "HTTP"
+      }
+    },
+    {
+      "id": "hm-1",
+      "type": "health_monitor",
+      "name": "http-monitor",
+      "meta": {
+        "type": "HTTP",
+        "delay": 5,
+        "max_retries": 3
+      }
+    },
+    {
+      "id": "member-1",
+      "type": "member",
+      "name": "web-01",
+      "meta": {
+        "address": "192.168.1.10"
+      }
+    },
+    {
+      "id": "router-1",
+      "type": "router",
+      "name": "demo-router",
+      "meta": {
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "id": "fip-1",
+      "type": "floating_ip",
+      "name": "172.24.4.10",
+      "meta": {
+        "status": "ACTIVE",
+        "fixed_ip_address": "192.168.1.10",
+        "floating_ip_address": "172.24.4.10"
+      }
+    },
+    {
+      "id": "vol-orphan",
+      "type": "volume",
+      "name": "orphan-vol",
+      "meta": {
+        "size": 50,
+        "volume_type": "ssd",
+        "status": "available",
+        "attachments": []
+      }
+    }
+  ],
+  "edges": [
+    {"from": "server-1", "to": "vol-3321", "type": "attached"},
+    {"from": "vol-3321", "to": "snap-1", "type": "has_snapshot"},
+    {"from": "server-1", "to": "port-ab12", "type": "has_port"},
+    {"from": "port-ab12", "to": "sg-1", "type": "has_sg"},
+    {"from": "server-2", "to": "vol-9982", "type": "attached"},
+    {"from": "net-1", "to": "subnet-1", "type": "has_subnet"},
+    {"from": "lb-1", "to": "listener-1", "type": "has_listener"},
+    {"from": "listener-1", "to": "pool-1", "type": "has_pool"},
+    {"from": "listener-1", "to": "policy-1", "type": "has_policy"},
+    {"from": "policy-1", "to": "rule-1", "type": "has_rule"},
+    {"from": "pool-1", "to": "hm-1", "type": "has_monitor"},
+    {"from": "pool-1", "to": "member-1", "type": "has_member"}
+  ]
+}

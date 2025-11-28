@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Distribution / Packaging
+build/
+dist/
+*.egg-info/
+
+# Local configuration
+clouds.yaml
+
+# Output files
+graph.json
