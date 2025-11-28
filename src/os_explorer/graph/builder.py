@@ -61,8 +61,8 @@ class GraphBuilder:
     def link_port_security_groups(self, ports: List[Dict[str, Any]]):
         """Link ports to their security groups."""
         for port in ports:
-            # Ports usually have 'security_groups' which is a list of IDs
-            sg_ids = port.get('security_groups', [])
+            # Ports usually have 'security_groups' or 'security_group_ids'
+            sg_ids = port.get('security_groups') or port.get('security_group_ids', [])
             for sg_id in sg_ids:
                 self.add_edge(
                     from_id=port['id'],
